@@ -104,3 +104,19 @@ export const updateCellStateInArray = (x, y, newCellState, oldGameStateArray) =>
 	newGameStateArray[y][x] = newCellState;
 	return newGameStateArray;
 };
+
+export const calculateCurrentStats = (gameFieldArray) => {
+	const { width, height } = calculateWidthAndHeight(gameFieldArray);
+	let aliveAtThisGeneration = 0;
+
+	for (var i = 0; i < height; i++) {
+		for (var j = 0; j < width; j++) {
+			aliveAtThisGeneration += gameFieldArray[i][j];
+		}
+	}
+
+	return {
+		aliveAtThisGeneration: aliveAtThisGeneration,
+		emptyAtThisGeneration: width * height - aliveAtThisGeneration
+	};
+};

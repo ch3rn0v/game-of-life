@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export class Cell extends React.Component {
 	updateCellState = (e) => {
-		if (e.altKey) {
+		if ((e.type === 'mouseenter' && e.altKey) || (e.type === 'click' && e.button === 0)) {
 			this.props.updateCellState(this.props.x, this.props.y, this.props.cellState);
 		}
 	};
@@ -16,7 +16,14 @@ export class Cell extends React.Component {
 			height: this.props.width - 2 + 'px',
 			border: '1px solid #ffffff'
 		};
-		return <div className={'cell ' + cellClassName} style={cssStyle} onMouseOver={this.updateCellState} />;
+		return (
+			<div
+				className={'cell ' + cellClassName}
+				style={cssStyle}
+				onMouseEnter={this.updateCellState}
+				onClick={this.updateCellState}
+			/>
+		);
 	}
 }
 
