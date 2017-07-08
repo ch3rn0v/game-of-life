@@ -16,7 +16,8 @@ export class Cell extends React.Component {
 		const cssStyle = {
 			width: this.props.width - 2 + 'px',
 			height: this.props.width - 2 + 'px',
-			border: '1px solid #ffffff'
+			borderWidth: '1px',
+			borderStyle: 'solid'
 		};
 		return (
 			<div

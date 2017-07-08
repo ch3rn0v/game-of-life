@@ -61,6 +61,12 @@ p.game-control {
 	float: left;
 	background-color: #84c26e;
 	font-size: 10px;
+	border-color: #ffffff;
+}
+
+.cell:hover {
+	cursor: pointer;
+	border-color: #ba0000;
 }
 
 .cell.alive {
