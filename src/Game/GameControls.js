@@ -8,6 +8,7 @@ export class GameControls extends React.Component {
 	render() {
 		return (
 			<div>
+				<h3>Game Controls</h3>
 				<ResumePauseButton
 					isRunning={this.props.isRunning}
 					resumeFunc={this.props.resumeFunc}

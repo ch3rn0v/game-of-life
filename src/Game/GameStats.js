@@ -9,6 +9,7 @@ export class GameStats extends React.Component {
 		const generationsPerSecond = 1000 / this.props.intervalTime;
 		return (
 			<div>
+				<h3>This round statistics</h3>
 				<p>Generations count: {this.props.generationsCount}. Generations per second: {generationsPerSecond}</p>
 				<p>Currently alive cells: {aliveAtThisGeneration}.</p>
 				<p>Currently empty cells: {emptyAtThisGeneration}.</p>
