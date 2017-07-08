@@ -1,5 +1,6 @@
 import React from 'react';
 import { GameStats } from './GameStats';
+import { GameControls } from './GameControls';
 import { GameField } from './GameField';
 
 import {
@@ -15,7 +16,7 @@ const DEFAULT_GAME_FIELD_HEIGTH = 30;
 
 // Time for each generation to be displayed.
 //1000 — 1 generation per second. 500 — 2 generations per second, etc.
-const DEFAULT_INTERVAL_TIME = 250;
+const DEFAULT_INTERVAL_TIME = 500;
 
 export class Game extends React.Component {
 	gameInterval = null;
@@ -24,13 +25,12 @@ export class Game extends React.Component {
 		super(props);
 
 		this.state = {
+			isRunning: true,
 			gameStateArray: createEmptyGameField(DEFAULT_GAME_FIELD_WIDTH, DEFAULT_GAME_FIELD_HEIGTH),
 			generationsCount: 0,
 			intervalTime: DEFAULT_INTERVAL_TIME,
 			aliveAtThisGeneration: 0,
-			aliveRunningTotal: 0,
-			emptyAtThisGeneration: 0,
-			deadRunningTotal: 0
+			emptyAtThisGeneration: 0
 		};
 
 		this.gameInterval = setInterval(this.ticker, this.state.intervalTime);
@@ -45,6 +45,20 @@ export class Game extends React.Component {
 			aliveAtThisGeneration: aliveAtThisGeneration,
 			emptyAtThisGeneration: emptyAtThisGeneration
 		});
+	};
+
+	onGamePause = () => {
+		clearInterval(this.gameInterval);
+		this.setState({
+			isRunning: false
+		});
+	};
+
+	onGameResume = () => {
+		this.setState({
+			isRunning: true
+		});
+		this.gameInterval = setInterval(this.ticker, this.state.intervalTime);
 	};
 
 	updateCellState = (x, y, oldState) => {
@@ -75,7 +89,11 @@ export class Game extends React.Component {
 					aliveAtThisGeneration={aliveAtThisGeneration}
 					emptyAtThisGeneration={emptyAtThisGeneration}
 				/>
-				{/*<GameControls /> */}
+				<GameControls
+					isRunning={this.state.isRunning}
+					resumeFunc={this.onGameResume}
+					pauseFunc={this.onGamePause}
+				/>
 				<GameField gameStateArray={gameStateArray} updateCellState={this.updateCellState} />
 			</div>
 		);
