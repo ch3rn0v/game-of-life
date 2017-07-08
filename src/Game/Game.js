@@ -1,4 +1,6 @@
 import React from 'react';
+import Math from 'mathjs';
+
 import { GameStats } from './GameStats';
 import { GameControls } from './GameControls';
 import { GameField } from './GameField';
@@ -15,8 +17,8 @@ const DEFAULT_GAME_FIELD_WIDTH = 60;
 const DEFAULT_GAME_FIELD_HEIGTH = 30;
 
 // Time for each generation to be displayed.
-//1000 — 1 generation per second. 500 — 2 generations per second, etc.
-const DEFAULT_INTERVAL_TIME = 500;
+//1000 — 1 generation per second. 50 — 20 generations per second, etc.
+const DEFAULT_INTERVAL_TIME = 50;
 
 export class Game extends React.Component {
 	gameInterval = null;
@@ -71,6 +73,16 @@ export class Game extends React.Component {
 		});
 	};
 
+	onGameSpeedChange = (newIntervalTime) => {
+		this.setState({
+			intervalTime: newIntervalTime
+		});
+		this.onGamePause();
+		if (this.state.isRunning) {
+			this.onGameResume();
+		}
+	};
+
 	updateCellState = (x, y, oldState) => {
 		const newCellState = oldState === 0 ? 1 : 0;
 		this.setState({
@@ -88,22 +100,27 @@ export class Game extends React.Component {
 			generationsCount,
 			intervalTime,
 			aliveAtThisGeneration,
-			emptyAtThisGeneration
+			emptyAtThisGeneration,
+			isRunning
 		} = this.state;
+
+		const currentSpeed = Math.round(1000 / intervalTime);
 
 		return (
 			<div>
 				<GameStats
 					generationsCount={generationsCount}
-					intervalTime={intervalTime}
+					currentSpeed={currentSpeed}
 					aliveAtThisGeneration={aliveAtThisGeneration}
 					emptyAtThisGeneration={emptyAtThisGeneration}
 				/>
 				<GameControls
-					isRunning={this.state.isRunning}
+					isRunning={isRunning}
 					resumeFunc={this.onGameResume}
 					pauseFunc={this.onGamePause}
 					resetFunc={this.onGameReset}
+					changeSpeedFunc={this.onGameSpeedChange}
+					currentSpeed={currentSpeed}
 				/>
 				<GameField gameStateArray={gameStateArray} updateCellState={this.updateCellState} />
 			</div>

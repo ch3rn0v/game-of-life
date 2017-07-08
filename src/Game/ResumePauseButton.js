@@ -5,7 +5,7 @@ export const ResumePauseButton = ({ isRunning, pauseFunc, resumeFunc }) => {
 	const onClickHandler = isRunning ? pauseFunc : resumeFunc;
 	const buttonLabel = isRunning ? 'Pause' : 'Resume';
 
-	return <button onClick={onClickHandler}>{buttonLabel}</button>;
+	return <button className="game-control" onClick={onClickHandler}>{buttonLabel}</button>;
 };
 
 ResumePauseButton.propTypes = {
