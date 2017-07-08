@@ -34,34 +34,73 @@ export const calculateWidthAndHeight = (twoDimensionArray) => {
 	}
 };
 
-const calculateAliveNeighbours = (x, y, gameFieldArray) => {
-	let neighboursCount = 0;
+const calculateNeighbourCoordinateDeltas = (x, y, gameFieldArray) => {
+	/* Neighbours' coordinates delta (relative to y, x of the cell)
+	[ -1, -1 ], [ -1, 0 ],  [ -1, 1 ],
+	[ 0,  -1 ],             [  0, 1 ],
+	[ 1,  -1 ], [  1, 0 ],  [  1, 1 ]
 
-	// If the cell is at the border of the field, we should not count its neighbours. Assume there is nobody.
-	let topVerticalShift = 0;
-	let bottomVerticalShift = 0;
-	let leftHorizontalShift = 0;
-	let rightHorizontalShift = 0;
+	Below we take it as initial value.
+	Then check if the cell is on the edge.
+	If so, we replace the 'out of range' coordinates with coordinates of the opposite edge cells.
+	As if we are not on a plane, but rather on a torus' surface.
+	*/
+
+	let neighbourCoordinateDeltas = [
+		[ y - 1, x - 1 ],
+		[ y - 1, x ],
+		[ y - 1, x + 1 ],
+		[ y, x - 1 ],
+		[ y, x + 1 ],
+		[ y + 1, x - 1 ],
+		[ y + 1, x ],
+		[ y + 1, x + 1 ]
+	];
+
+	// If the cell is at the edge, we take cells from the opposite edge as its neighbours
+	const maxYValue = gameFieldArray.length - 1;
+	const maxXValue = gameFieldArray[0].length - 1;
 
 	if (y === 0) {
-		topVerticalShift = 1;
-	} else if (y === gameFieldArray.length - 1) {
-		bottomVerticalShift = -1;
+		neighbourCoordinateDeltas = [
+			[ maxYValue, x - 1 ],
+			[ maxYValue, x ],
+			[ maxYValue, x + 1 ],
+			...neighbourCoordinateDeltas.slice(3)
+		];
+	} else if (y === maxYValue) {
+		neighbourCoordinateDeltas = [ ...neighbourCoordinateDeltas.slice(0, 5), [ 0, x - 1 ], [ 0, x ], [ 0, x + 1 ] ];
 	}
 	if (x === 0) {
-		leftHorizontalShift = 1;
-	} else if (x === gameFieldArray[0].length - 1) {
-		rightHorizontalShift = -1;
+		neighbourCoordinateDeltas = [
+			[ neighbourCoordinateDeltas[0][0], maxXValue ],
+			...neighbourCoordinateDeltas.slice(1, 3),
+			[ neighbourCoordinateDeltas[3][0], maxXValue ],
+			...neighbourCoordinateDeltas.slice(4, 5),
+			[ neighbourCoordinateDeltas[5][0], maxXValue ],
+			...neighbourCoordinateDeltas.slice(6)
+		];
+	} else if (x === maxXValue) {
+		neighbourCoordinateDeltas = [
+			...neighbourCoordinateDeltas.slice(0, 2),
+			[ neighbourCoordinateDeltas[2][0], 0 ],
+			...neighbourCoordinateDeltas.slice(3, 4),
+			[ neighbourCoordinateDeltas[4][0], 0 ],
+			...neighbourCoordinateDeltas.slice(5, 7),
+			[ neighbourCoordinateDeltas[7][0], 0 ]
+		];
 	}
 
-	// Check every cell around the given one and count the amount of alive ones.
-	for (var m = -1 + topVerticalShift; m < 2 + bottomVerticalShift; m++) {
-		for (var n = -1 + leftHorizontalShift; n < 2 + rightHorizontalShift; n++) {
-			if ((m !== 0 || n !== 0) && gameFieldArray[y + m][x + n] === 1) {
-				neighboursCount += 1;
-			}
-		}
-	}
+	return neighbourCoordinateDeltas;
+};
+
+const calculateAliveNeighbours = (x, y, gameFieldArray) => {
+	let neighboursCount = 0;
+	let neighbourCoordinateDeltas = calculateNeighbourCoordinateDeltas(x, y, gameFieldArray);
+
+	neighboursCount = neighbourCoordinateDeltas.reduce((sum, [ neighbourY, neighbourX ]) => {
+		return sum + gameFieldArray[neighbourY][neighbourX];
+	}, 0);
 
 	return neighboursCount;
 };
