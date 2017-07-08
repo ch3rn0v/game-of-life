@@ -104,10 +104,12 @@ export class Game extends React.Component {
 			isRunning
 		} = this.state;
 
+		// There is always one generation per interval time.
+		// So divide one generation by interval time (which is divided by 1000 to convert it from ms to seconds).
 		const currentSpeed = Math.round(1000 / intervalTime);
 
 		return (
-			<div>
+			<div className="game-wrapper">
 				<GameStats
 					generationsCount={generationsCount}
 					currentSpeed={currentSpeed}

@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 export class GameStats extends React.Component {
 	render() {
 		const { aliveAtThisGeneration, emptyAtThisGeneration } = this.props;
-		// There is always one generation per interval time.
-		// So divide one generation by interval time (which is divided by 1000 to convert it from ms to seconds).
 		const generationsPerSecond = this.props.currentSpeed;
 		return (
 			<div>
