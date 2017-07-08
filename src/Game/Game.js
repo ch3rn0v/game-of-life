@@ -26,9 +26,15 @@ export class Game extends React.Component {
 	constructor(props) {
 		super(props);
 
+		const { initialGameField, newcomers } = createEmptyGameField(
+			DEFAULT_GAME_FIELD_WIDTH,
+			DEFAULT_GAME_FIELD_HEIGTH
+		);
+
 		this.state = {
 			isRunning: true,
-			gameStateArray: createEmptyGameField(DEFAULT_GAME_FIELD_WIDTH, DEFAULT_GAME_FIELD_HEIGTH),
+			gameStateArray: initialGameField,
+			newcomersCoords: newcomers,
 			generationsCount: 0,
 			intervalTime: DEFAULT_INTERVAL_TIME,
 			aliveAtThisGeneration: 0,
@@ -40,9 +46,14 @@ export class Game extends React.Component {
 
 	ticker = () => {
 		const { aliveAtThisGeneration, emptyAtThisGeneration } = calculateCurrentStats(this.state.gameStateArray);
+		const { nextGeneration, newcomers } = processNextGeneration(
+			this.state.gameStateArray,
+			this.state.newcomersCoords
+		);
 
 		this.setState({
-			gameStateArray: processNextGeneration(this.state.gameStateArray),
+			gameStateArray: nextGeneration,
+			newcomersCoords: newcomers,
 			generationsCount: this.state.generationsCount + 1,
 			aliveAtThisGeneration: aliveAtThisGeneration,
 			emptyAtThisGeneration: emptyAtThisGeneration
@@ -65,8 +76,14 @@ export class Game extends React.Component {
 
 	onGameReset = () => {
 		this.onGamePause();
+		const { initialGameField, newcomers } = createEmptyGameField(
+			DEFAULT_GAME_FIELD_WIDTH,
+			DEFAULT_GAME_FIELD_HEIGTH
+		);
+
 		this.setState({
-			gameStateArray: createEmptyGameField(DEFAULT_GAME_FIELD_WIDTH, DEFAULT_GAME_FIELD_HEIGTH),
+			gameStateArray: initialGameField,
+			newcomersCoords: newcomers,
 			generationsCount: 0,
 			aliveAtThisGeneration: 0,
 			emptyAtThisGeneration: 0
@@ -97,6 +114,7 @@ export class Game extends React.Component {
 	render() {
 		const {
 			gameStateArray,
+			newcomersCoords,
 			generationsCount,
 			intervalTime,
 			aliveAtThisGeneration,
@@ -124,7 +142,11 @@ export class Game extends React.Component {
 					changeSpeedFunc={this.onGameSpeedChange}
 					currentSpeed={currentSpeed}
 				/>
-				<GameField gameStateArray={gameStateArray} updateCellState={this.updateCellState} />
+				<GameField
+					gameStateArray={gameStateArray}
+					newcomersCoords={newcomersCoords}
+					updateCellState={this.updateCellState}
+				/>
 			</div>
 		);
 	}

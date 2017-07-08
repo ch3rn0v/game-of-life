@@ -27,11 +27,15 @@ export class GameField extends React.Component {
 			<div className="game-field" style={this.state.cssStyles}>
 				{this.props.gameStateArray.map((row, i) => {
 					return row.map((cellState, j) => {
+						const isNewcomer = this.props.newcomersCoords[i][j] === 1 ? true : false;
+						const isCorpse = this.props.newcomersCoords[i][j] === -1 ? true : false;
 						return (
 							<Cell
 								cellState={cellState}
 								x={j}
 								y={i}
+								isNewcomer={isNewcomer}
+								isCorpse={isCorpse}
 								width={this.state.cellWidth}
 								updateCellState={this.props.updateCellState}
 							/>
@@ -45,5 +49,6 @@ export class GameField extends React.Component {
 
 GameField.propTypes = {
 	gameStateArray: PropTypes.array.isRequired,
+	newcomersCoords: PropTypes.array.isRequired,
 	updateCellState: PropTypes.func.isRequired
 };

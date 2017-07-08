@@ -1,5 +1,7 @@
 export const createEmptyGameField = (width, height) => {
 	let emptyGameField = [];
+	let newcomers = [];
+
 	// "i" stands for y axis, "j" stands for x axis.
 	// Because by default html elements are displayed in a row, not in a column.
 	for (var i = 0; i < height; i++) {
@@ -8,10 +10,12 @@ export const createEmptyGameField = (width, height) => {
 			row.push(0); // Zero stands for an empty or "dead" cell.
 		}
 		emptyGameField.push(row);
+		newcomers.push(row); // Populate this array with initial values of zero.
 	}
 
 	// Initial glider figure:
-	return addGliderToBottomLeft(width, height, emptyGameField);
+	const initialGameField = addGliderToBottomLeft(width, height, emptyGameField);
+	return { initialGameField, newcomers };
 };
 
 const addGliderToBottomLeft = (width, height, emptyGameField) => {
@@ -116,37 +120,45 @@ const calculateAliveNeighbours = (x, y, gameFieldArray) => {
 	return neighboursCount;
 };
 
-export const processNextGeneration = (prevGeneration) => {
+export const processNextGeneration = (prevGeneration, prevNewcomers) => {
 	const { width, height } = calculateWidthAndHeight(prevGeneration);
 	let nextGeneration = [];
+	let newcomers = []; // '-1' — cell died. '0' — cell was not affected (either survived or remained dead) . '1' — cell was born.
 
 	for (var i = 0; i < height; i++) {
 		let row = [];
+		let newcomersRow = [];
 		for (var j = 0; j < width; j++) {
 			let aliveNeighboursCount = calculateAliveNeighbours(j, i, prevGeneration);
 			if (prevGeneration[i][j] === 0 && aliveNeighboursCount === 3) {
 				// Any dead cell with exactly three alive neighbours becomes a live cell, as if by reproduction.
 				row.push(1);
+				newcomersRow.push(1);
 			} else if (prevGeneration[i][j] === 0 && aliveNeighboursCount !== 3) {
 				// Any dead cell with not exactly three alive neighbours becomes a dead cell, as if reproduction was not available.
 				row.push(0);
+				newcomersRow.push(0);
 			} else if (prevGeneration[i][j] === 1) {
 				if (aliveNeighboursCount < 2) {
 					// Any live cell with fewer than two alive neighbours dies, as if caused by underpopulation.
 					row.push(0);
+					newcomersRow.push(-1);
 				} else if (aliveNeighboursCount <= 3) {
 					// Any live cell with two or three alive neighbours lives on to the next generation.
 					row.push(1);
+					newcomersRow.push(0);
 				} else {
 					// Any live cell with more than three alive neighbours dies, as if by overpopulation.
 					row.push(0);
+					newcomersRow.push(-1);
 				}
 			}
 		}
 		nextGeneration.push(row);
+		newcomers.push(newcomersRow);
 	}
 
-	return nextGeneration;
+	return { nextGeneration, newcomers };
 };
 
 export const updateCellStateInArray = (x, y, newCellState, oldGameStateArray) => {

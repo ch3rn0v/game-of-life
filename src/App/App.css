@@ -51,10 +51,19 @@ p.game-control {
 .cell {
 	float: left;
 	background-color: #84c26e;
+	font-size: 10px;
 }
 
 .cell.alive {
-	background-color: #840000;
+	background-color: #990000;
+}
+
+.cell.alive.newcomer {
+	background-color: #ba0000;
+}
+
+.cell.empty.corpse {
+	background-color: #64924e;
 }
 
 .footer {

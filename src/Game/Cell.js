@@ -9,8 +9,10 @@ export class Cell extends React.Component {
 	};
 
 	render() {
-		const cellState = this.props.cellState;
-		const cellClassName = cellState === 1 ? 'alive' : 'dead';
+		const { cellState, isNewcomer, isCorpse } = this.props;
+		const cellIsAliveClass = cellState === 1 ? 'alive' : 'empty';
+		const cellIsNewcomerClass = isNewcomer ? 'newcomer' : '';
+		const cellIsCorpseClass = isCorpse ? 'corpse' : '';
 		const cssStyle = {
 			width: this.props.width - 2 + 'px',
 			height: this.props.width - 2 + 'px',
@@ -18,7 +20,7 @@ export class Cell extends React.Component {
 		};
 		return (
 			<div
-				className={'cell ' + cellClassName}
+				className={'cell ' + cellIsAliveClass + ' ' + cellIsNewcomerClass + ' ' + cellIsCorpseClass}
 				style={cssStyle}
 				onMouseEnter={this.updateCellState}
 				onClick={this.updateCellState}
@@ -31,6 +33,8 @@ Cell.propTypes = {
 	cellState: PropTypes.number.isRequired,
 	x: PropTypes.number.isRequired,
 	y: PropTypes.number.isRequired,
+	isNewcomer: PropTypes.bool.isRequired,
+	isCorpse: PropTypes.bool.isRequired,
 	width: PropTypes.number.isRequired,
 	updateCellState: PropTypes.func.isRequired
 };
