@@ -61,6 +61,16 @@ export class Game extends React.Component {
 		this.gameInterval = setInterval(this.ticker, this.state.intervalTime);
 	};
 
+	onGameReset = () => {
+		this.onGamePause();
+		this.setState({
+			gameStateArray: createEmptyGameField(DEFAULT_GAME_FIELD_WIDTH, DEFAULT_GAME_FIELD_HEIGTH),
+			generationsCount: 0,
+			aliveAtThisGeneration: 0,
+			emptyAtThisGeneration: 0
+		});
+	};
+
 	updateCellState = (x, y, oldState) => {
 		const newCellState = oldState === 0 ? 1 : 0;
 		this.setState({
@@ -93,6 +103,7 @@ export class Game extends React.Component {
 					isRunning={this.state.isRunning}
 					resumeFunc={this.onGameResume}
 					pauseFunc={this.onGamePause}
+					resetFunc={this.onGameReset}
 				/>
 				<GameField gameStateArray={gameStateArray} updateCellState={this.updateCellState} />
 			</div>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { ResumePauseButton } from './ResumePauseButton';
+import { ResetFieldButton } from './ResetFieldButton';
 
 export class GameControls extends React.Component {
 	render() {
@@ -12,7 +13,7 @@ export class GameControls extends React.Component {
 					resumeFunc={this.props.resumeFunc}
 					pauseFunc={this.props.pauseFunc}
 				/>
-				{/*Clear*/}
+				<ResetFieldButton resetFunc={this.props.resetFunc} />
 				{/*ChangeSpeed*/}
 			</div>
 		);
@@ -22,5 +23,6 @@ export class GameControls extends React.Component {
 GameControls.propTypes = {
 	isRunning: PropTypes.bool.isRequired,
 	resumeFunc: PropTypes.func.isRequired,
-	pauseFunc: PropTypes.func.isRequired
+	pauseFunc: PropTypes.func.isRequired,
+	resetFunc: PropTypes.func.isRequired
 };
