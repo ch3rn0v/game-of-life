@@ -13,8 +13,8 @@ import {
 } from './lib/gameHelper';
 
 // Field's sizes:
-const DEFAULT_GAME_FIELD_WIDTH = 60;
-const DEFAULT_GAME_FIELD_HEIGTH = 30;
+const DEFAULT_GAME_FIELD_WIDTH = 40;
+const DEFAULT_GAME_FIELD_HEIGTH = 20;
 
 // Time for each generation to be displayed.
 //1000 — 1 generation per second. 50 — 20 generations per second, etc.

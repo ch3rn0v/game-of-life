@@ -10,17 +10,28 @@ export const createEmptyGameField = (width, height) => {
 		emptyGameField.push(row);
 	}
 
-	// TODO: Extract creating glider figure to a separate function
 	// Initial glider figure:
-	const shiftY = 25;
-	const shiftX = 2;
-	emptyGameField[shiftY + 0][shiftX + 1] = 1;
-	emptyGameField[shiftY + 0][shiftX + 2] = 1;
-	emptyGameField[shiftY + 1][shiftX + 0] = 1;
-	emptyGameField[shiftY + 1][shiftX + 2] = 1;
-	emptyGameField[shiftY + 2][shiftX + 2] = 1;
+	return addGliderToBottomLeft(width, height, emptyGameField);
+};
 
-	return emptyGameField;
+const addGliderToBottomLeft = (width, height, emptyGameField) => {
+	let gameFieldWithGlider = [ ...emptyGameField ];
+
+	const shiftY = height - 4;
+	const shiftX = 2;
+	if (width < 5 || height < 5) {
+		// Don't want to fit glider in such little space.
+		// Return array as it was passed.
+		return emptyGameField;
+	} else {
+		gameFieldWithGlider[shiftY + 0][shiftX + 1] = 1;
+		gameFieldWithGlider[shiftY + 0][shiftX + 2] = 1;
+		gameFieldWithGlider[shiftY + 1][shiftX + 0] = 1;
+		gameFieldWithGlider[shiftY + 1][shiftX + 2] = 1;
+		gameFieldWithGlider[shiftY + 2][shiftX + 2] = 1;
+
+		return gameFieldWithGlider;
+	}
 };
 
 export const calculateWidthAndHeight = (twoDimensionArray) => {
