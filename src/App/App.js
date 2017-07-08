@@ -9,9 +9,11 @@ export class App extends React.Component {
 	render() {
 		return (
 			<div className="App">
-				<Header />
-				<UserInstructions />
-				<Game />
+				<div className="content-section">
+					<Header />
+					<UserInstructions />
+					<Game />
+				</div>
 				<Footer />
 			</div>
 		);
