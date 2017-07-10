@@ -5,22 +5,16 @@ import { ResumePauseButton } from './ResumePauseButton';
 import { ResetFieldButton } from './ResetFieldButton';
 import { GameSpeedControl } from './GameSpeedControl';
 
-export class GameControls extends React.Component {
-	render() {
-		return (
-			<div>
-				<h3 className="game-control-header">Game Controls</h3>
-				<ResumePauseButton
-					isRunning={this.props.isRunning}
-					resumeFunc={this.props.resumeFunc}
-					pauseFunc={this.props.pauseFunc}
-				/>
-				<ResetFieldButton resetFunc={this.props.resetFunc} />
-				<GameSpeedControl changeSpeedFunc={this.props.changeSpeedFunc} currentSpeed={this.props.currentSpeed} />
-			</div>
-		);
-	}
-}
+export const GameControls = (props) => {
+	return (
+		<div>
+			<h3 className="game-control-header">Game Controls</h3>
+			<ResumePauseButton isRunning={props.isRunning} resumeFunc={props.resumeFunc} pauseFunc={props.pauseFunc} />
+			<ResetFieldButton resetFunc={props.resetFunc} />
+			<GameSpeedControl changeSpeedFunc={props.changeSpeedFunc} currentSpeed={props.currentSpeed} />
+		</div>
+	);
+};
 
 GameControls.propTypes = {
 	isRunning: PropTypes.bool.isRequired,
