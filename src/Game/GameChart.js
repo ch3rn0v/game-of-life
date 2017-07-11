@@ -28,7 +28,7 @@ export class GameChart extends React.Component {
 					containerComponent={
 						<VictoryCursorContainer
 							cursorLabel={(point) =>
-								`${Math.round(point.y)} cells alive\nat generation ${Math.round(point.x)}`}
+								`Cells count: ${Math.round(point.y)}\nat generation: ${Math.round(point.x)}`}
 							cursorLabelOffset={{
 								x: 5,
 								y: -25

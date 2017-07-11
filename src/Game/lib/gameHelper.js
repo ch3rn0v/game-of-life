@@ -15,20 +15,24 @@ export const createEmptyGameField = (width, height) => {
 		newcomers.push(row); // Populate this array with initial values of zero.
 	}
 
-	// Initial glider figure:
-	const initialGameField = addGliderToBottomLeft(width, height, emptyGameField);
+	// Initial Glider and R-Pentomino figures:
+	const gameFieldWithGlider = addGliderToBottomLeft(width, height, emptyGameField);
+	const gameFieldWithRPentomino = addRPentomino(width, height, gameFieldWithGlider);
+
+	const initialGameField = gameFieldWithRPentomino;
+
 	return { initialGameField, newcomers };
 };
 
-const addGliderToBottomLeft = (width, height, emptyGameField) => {
-	let gameFieldWithGlider = [ ...emptyGameField ];
+const addGliderToBottomLeft = (width, height, gameFieldArray) => {
+	let gameFieldWithGlider = [ ...gameFieldArray ];
 
 	const shiftY = height - 4;
 	const shiftX = 2;
 	if (width < 5 || height < 5) {
 		// Don't want to fit glider in such little space.
 		// Return array as it was passed.
-		return emptyGameField;
+		return gameFieldArray;
 	} else {
 		gameFieldWithGlider[shiftY + 0][shiftX + 1] = 1;
 		gameFieldWithGlider[shiftY + 0][shiftX + 2] = 1;
@@ -37,6 +41,26 @@ const addGliderToBottomLeft = (width, height, emptyGameField) => {
 		gameFieldWithGlider[shiftY + 2][shiftX + 2] = 1;
 
 		return gameFieldWithGlider;
+	}
+};
+
+const addRPentomino = (width, height, gameFieldArray) => {
+	let gameFieldWithRPentomino = [ ...gameFieldArray ];
+
+	const shiftY = 4;
+	const shiftX = 3;
+	if (width < 7 || height < 8) {
+		// Don't want to fit R-Pentomino in such little space.
+		// Return array as it was passed.
+		return gameFieldArray;
+	} else {
+		gameFieldWithRPentomino[shiftY + 1][shiftX + 0] = 1;
+		gameFieldWithRPentomino[shiftY + 0][shiftX + 1] = 1;
+		gameFieldWithRPentomino[shiftY + 0][shiftX + 2] = 1;
+		gameFieldWithRPentomino[shiftY + 1][shiftX + 1] = 1;
+		gameFieldWithRPentomino[shiftY + 2][shiftX + 1] = 1;
+
+		return gameFieldWithRPentomino;
 	}
 };
 
