@@ -13,12 +13,23 @@ import {
 
 export class GameChart extends React.Component {
 	state = {
-		cursorValue: { x: 0, y: 0 }
+		cursorValue: 0
 	};
 
 	onCursorValueChange = (newCursorValue) => {
 		if (newCursorValue !== undefined && newCursorValue !== null) {
 			this.setState({ cursorValue: newCursorValue });
+		}
+	};
+
+	calculateCellCountByGeneration = (chartData, generation) => {
+		const index = chartData.findIndex((dataObject) => {
+			return dataObject.generation === generation;
+		});
+		if (index >= 0) {
+			return chartData[index].aliveAtThisGeneration;
+		} else {
+			return 0;
 		}
 	};
 
@@ -31,29 +42,21 @@ export class GameChart extends React.Component {
 			data: { fill: '#84c26e' }
 		};
 
-		const cursorIsInTheBotHalf =
-			this.state.cursorValue.y <
-			0.5 *
-				(chartData[chartData.length - 1].aliveAtThisGeneration +
-					chartData[chartData.length - 1].emptyAtThisGeneration);
-		const cursorIsInTheLeftHalf = this.state.cursorValue.x < 0.6 * chartData[chartData.length - 1].generation;
+		const cursorIsInTheLeftHalf = this.state.cursorValue < 0.6 * chartData[chartData.length - 1].generation;
 
 		let cursorLabelShiftX,
 			cursorLabelShiftY = 0;
 
+		const cursorPickedGeneration = Math.round(this.state.cursorValue);
+		const aliveCellsAtCursorPickedGeneration =
+			cursorPickedGeneration > 0
+				? this.calculateCellCountByGeneration(chartData, cursorPickedGeneration)
+				: chartData[0].aliveAtThisGeneration;
+
 		if (cursorIsInTheLeftHalf) {
 			cursorLabelShiftX = 5;
 		} else {
-			cursorLabelShiftX = -110;
-		}
-
-		if (cursorIsInTheBotHalf) {
-			cursorLabelShiftY = -25;
-		} else {
-			cursorLabelShiftY = 20;
-			if (cursorIsInTheLeftHalf) {
-				cursorLabelShiftX += 10;
-			}
+			cursorLabelShiftX = -125;
 		}
 
 		return (
@@ -64,8 +67,9 @@ export class GameChart extends React.Component {
 					height={280}
 					containerComponent={
 						<VictoryCursorContainer
+							dimension="x"
 							cursorLabel={(point) =>
-								`Cells count is: ${Math.round(point.y)}\nat generation: ${Math.round(point.x)}`}
+								`Cells now alive: ${aliveCellsAtCursorPickedGeneration}\nat generation: ${cursorPickedGeneration}`}
 							cursorLabelOffset={{
 								x: cursorLabelShiftX,
 								y: cursorLabelShiftY

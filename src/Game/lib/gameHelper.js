@@ -213,9 +213,10 @@ export const calculateCurrentStats = (gameFieldArray) => {
 	};
 };
 
-export const CalculateChartData = (gameStateArray, generationIndex) => {
+export const CalculateChartData = (aliveAtThisGeneration, emptyAtThisGeneration, generationIndex) => {
 	return {
-		...calculateCurrentStats(gameStateArray),
+		aliveAtThisGeneration: aliveAtThisGeneration,
+		emptyAtThisGeneration: emptyAtThisGeneration,
 		generation: generationIndex
 	};
 };
