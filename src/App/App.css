@@ -65,7 +65,6 @@ p.game-control {
 }
 
 .cell:hover {
-	cursor: pointer;
 	border-color: #ba0000;
 }
 
