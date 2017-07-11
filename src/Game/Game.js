@@ -20,7 +20,7 @@ const DEFAULT_GAME_FIELD_HEIGTH = 20;
 
 // Time for each generation to be displayed.
 //1000 — 1 generation per second. 50 — 20 generations per second, etc.
-const DEFAULT_INTERVAL_TIME = 1250;
+const DEFAULT_INTERVAL_TIME = 100;
 
 export class Game extends React.Component {
 	gameInterval = null;
