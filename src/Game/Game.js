@@ -4,6 +4,7 @@ import Math from 'mathjs';
 import { GameStats } from './GameStats';
 import { GameControls } from './GameControls';
 import { GameField } from './GameField';
+import { GameChart } from './GameChart';
 
 import {
 	createEmptyGameField,
@@ -35,6 +36,7 @@ export class Game extends React.Component {
 			isRunning: true,
 			gameStateArray: initialGameField,
 			newcomersCoords: newcomers,
+			chartData: [],
 			generationsCount: 0,
 			intervalTime: DEFAULT_INTERVAL_TIME,
 			aliveAtThisGeneration: 0,
@@ -131,6 +133,7 @@ export class Game extends React.Component {
 		const {
 			gameStateArray,
 			newcomersCoords,
+			chartData,
 			generationsCount,
 			intervalTime,
 			aliveAtThisGeneration,
@@ -165,6 +168,7 @@ export class Game extends React.Component {
 					onMouseUp={this.onMouseUp}
 					updateCellState={this.updateCellState}
 				/>
+				<GameChart chartData={chartData} />
 			</div>
 		);
 	}
