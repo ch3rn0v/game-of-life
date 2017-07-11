@@ -1,3 +1,5 @@
+// Game field initiation functions
+
 export const createEmptyGameField = (width, height) => {
 	let emptyGameField = [];
 	let newcomers = [];
@@ -48,6 +50,8 @@ export const calculateWidthAndHeight = (twoDimensionArray) => {
 		throw new Error('The provided input is not a valid array.');
 	}
 };
+
+// Game mechanics functions (process next generation, change cell's state)
 
 const calculateNeighbourCoordinateDeltas = (x, y, gameFieldArray) => {
 	/* Neighbours' coordinates delta (relative to y, x of the cell)
@@ -167,6 +171,8 @@ export const updateCellStateInArray = (x, y, newCellState, oldGameStateArray) =>
 	return newGameStateArray;
 };
 
+// Game stats functions
+
 export const calculateCurrentStats = (gameFieldArray) => {
 	const { width, height } = calculateWidthAndHeight(gameFieldArray);
 	let aliveAtThisGeneration = 0;
@@ -180,5 +186,12 @@ export const calculateCurrentStats = (gameFieldArray) => {
 	return {
 		aliveAtThisGeneration: aliveAtThisGeneration,
 		emptyAtThisGeneration: width * height - aliveAtThisGeneration
+	};
+};
+
+export const CalculateChartData = (gameStateArray, generationIndex) => {
+	return {
+		...calculateCurrentStats(gameStateArray),
+		generation: generationIndex
 	};
 };

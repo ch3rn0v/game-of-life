@@ -49,6 +49,16 @@ h3 {
 	margin-right: 10px;
 }
 
+.field-and-chart-wrapper {
+	width: 100%;
+	overflow: auto;
+	float: none;
+}
+
+.game-field {
+	float: left;
+}
+
 button.game-control {
 	min-width: 80px;
 }
@@ -79,6 +89,13 @@ p.game-control {
 
 .cell.empty.corpse {
 	background-color: #64924e;
+}
+
+.chart {
+	float: left;
+	width: 440px;
+	height: 280px;
+	background-color: #f9f9f9;
 }
 
 .footer {

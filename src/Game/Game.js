@@ -10,7 +10,8 @@ import {
 	createEmptyGameField,
 	processNextGeneration,
 	updateCellStateInArray,
-	calculateCurrentStats
+	calculateCurrentStats,
+	CalculateChartData
 } from './lib/gameHelper';
 
 // Field's sizes:
@@ -19,7 +20,7 @@ const DEFAULT_GAME_FIELD_HEIGTH = 20;
 
 // Time for each generation to be displayed.
 //1000 — 1 generation per second. 50 — 20 generations per second, etc.
-const DEFAULT_INTERVAL_TIME = 125;
+const DEFAULT_INTERVAL_TIME = 1250;
 
 export class Game extends React.Component {
 	gameInterval = null;
@@ -53,10 +54,15 @@ export class Game extends React.Component {
 			this.state.gameStateArray,
 			this.state.newcomersCoords
 		);
+		const nextGenerationChartData = [
+			...this.state.chartData,
+			CalculateChartData(nextGeneration, this.state.generationsCount + 1)
+		];
 
 		this.setState({
 			gameStateArray: nextGeneration,
 			newcomersCoords: newcomers,
+			chartData: nextGenerationChartData,
 			generationsCount: this.state.generationsCount + 1,
 			aliveAtThisGeneration: aliveAtThisGeneration,
 			emptyAtThisGeneration: emptyAtThisGeneration
@@ -161,14 +167,16 @@ export class Game extends React.Component {
 					changeSpeedFunc={this.onGameSpeedChange}
 					currentSpeed={currentSpeed}
 				/>
-				<GameField
-					gameStateArray={gameStateArray}
-					newcomersCoords={newcomersCoords}
-					onMouseDown={this.onMouseDown}
-					onMouseUp={this.onMouseUp}
-					updateCellState={this.updateCellState}
-				/>
-				<GameChart chartData={chartData} />
+				<div className="field-and-chart-wrapper">
+					<GameField
+						gameStateArray={gameStateArray}
+						newcomersCoords={newcomersCoords}
+						onMouseDown={this.onMouseDown}
+						onMouseUp={this.onMouseUp}
+						updateCellState={this.updateCellState}
+					/>
+					<GameChart chartData={chartData} />
+				</div>
 			</div>
 		);
 	}
