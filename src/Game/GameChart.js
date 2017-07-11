@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
 	VictoryChart,
 	VictoryCursorContainer,
@@ -115,3 +117,7 @@ export class GameChart extends React.Component {
 		);
 	}
 }
+
+GameChart.propTypes = {
+	chartData: PropTypes.array.isRequired
+};
