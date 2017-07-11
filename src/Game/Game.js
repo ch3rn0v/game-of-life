@@ -50,6 +50,12 @@ export class Game extends React.Component {
 
 	ticker = () => {
 		const { aliveAtThisGeneration, emptyAtThisGeneration } = calculateCurrentStats(this.state.gameStateArray);
+
+		// Pause if there is no one alive.
+		if (aliveAtThisGeneration === 0) {
+			this.onGamePause();
+		}
+
 		const { nextGeneration, newcomers } = processNextGeneration(
 			this.state.gameStateArray,
 			this.state.newcomersCoords
