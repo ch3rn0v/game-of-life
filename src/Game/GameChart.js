@@ -10,6 +10,16 @@ import {
 } from 'victory';
 
 export class GameChart extends React.Component {
+	state = {
+		cursorValue: { x: 0, y: 0 }
+	};
+
+	onCursorValueChange = (newCursorValue) => {
+		if (newCursorValue !== undefined && newCursorValue !== null) {
+			this.setState({ cursorValue: newCursorValue });
+		}
+	};
+
 	render() {
 		const chartData = this.props.chartData;
 		const aliveCellsAreaStyle = {
@@ -18,6 +28,31 @@ export class GameChart extends React.Component {
 		const emptyCellsAreaStyle = {
 			data: { fill: '#84c26e' }
 		};
+
+		const cursorIsInTheBotHalf =
+			this.state.cursorValue.y <
+			0.5 *
+				(chartData[chartData.length - 1].aliveAtThisGeneration +
+					chartData[chartData.length - 1].emptyAtThisGeneration);
+		const cursorIsInTheLeftHalf = this.state.cursorValue.x < 0.6 * chartData[chartData.length - 1].generation;
+
+		let cursorLabelShiftX,
+			cursorLabelShiftY = 0;
+
+		if (cursorIsInTheLeftHalf) {
+			cursorLabelShiftX = 5;
+		} else {
+			cursorLabelShiftX = -110;
+		}
+
+		if (cursorIsInTheBotHalf) {
+			cursorLabelShiftY = -25;
+		} else {
+			cursorLabelShiftY = 20;
+			if (cursorIsInTheLeftHalf) {
+				cursorLabelShiftX += 10;
+			}
+		}
 
 		return (
 			<div className="chart">
@@ -28,10 +63,13 @@ export class GameChart extends React.Component {
 					containerComponent={
 						<VictoryCursorContainer
 							cursorLabel={(point) =>
-								`Cells count: ${Math.round(point.y)}\nat generation: ${Math.round(point.x)}`}
+								`Cells count is: ${Math.round(point.y)}\nat generation: ${Math.round(point.x)}`}
 							cursorLabelOffset={{
-								x: 5,
-								y: -25
+								x: cursorLabelShiftX,
+								y: cursorLabelShiftY
+							}}
+							onChange={(newCursorValue) => {
+								this.onCursorValueChange(newCursorValue);
 							}}
 						/>
 					}
