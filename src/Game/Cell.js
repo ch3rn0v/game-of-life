@@ -2,10 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export class Cell extends React.Component {
-	updateCellState = (e) => {
-		if ((e.type === 'mouseenter' && e.altKey) || (e.type === 'click' && e.button === 0)) {
-			this.props.updateCellState(this.props.x, this.props.y, this.props.cellState);
-		}
+	onMouseDown = (e) => {
+		e.preventDefault();
+		this.props.onMouseDown();
+		this.props.updateCellState(this.props.x, this.props.y, this.props.cellState, true);
+	};
+
+	onMouseUp = (e) => {
+		e.preventDefault();
+		this.props.onMouseUp();
+	};
+
+	onMouseEnter = (e) => {
+		e.preventDefault();
+		this.props.updateCellState(this.props.x, this.props.y, this.props.cellState, false);
 	};
 
 	render() {
@@ -23,8 +33,13 @@ export class Cell extends React.Component {
 			<div
 				className={'cell ' + cellIsAliveClass + ' ' + cellIsNewcomerClass + ' ' + cellIsCorpseClass}
 				style={cssStyle}
-				onMouseEnter={this.updateCellState}
-				onClick={this.updateCellState}
+				onDragStart={() => {
+					return false;
+				}}
+				onMouseDown={this.onMouseDown}
+				onMouseUp={this.onMouseUp}
+				onMouseEnter={this.onMouseEnter}
+				//onClick={this.onMouseClick}
 			/>
 		);
 	}

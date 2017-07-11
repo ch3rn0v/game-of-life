@@ -37,6 +37,8 @@ export class GameField extends React.Component {
 								isNewcomer={isNewcomer}
 								isCorpse={isCorpse}
 								width={this.state.cellWidth}
+								onMouseDown={this.props.onMouseDown}
+								onMouseUp={this.props.onMouseUp}
 								updateCellState={this.props.updateCellState}
 							/>
 						);

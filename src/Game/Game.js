@@ -18,7 +18,7 @@ const DEFAULT_GAME_FIELD_HEIGTH = 20;
 
 // Time for each generation to be displayed.
 //1000 — 1 generation per second. 50 — 20 generations per second, etc.
-const DEFAULT_INTERVAL_TIME = 250;
+const DEFAULT_INTERVAL_TIME = 125;
 
 export class Game extends React.Component {
 	gameInterval = null;
@@ -38,7 +38,8 @@ export class Game extends React.Component {
 			generationsCount: 0,
 			intervalTime: DEFAULT_INTERVAL_TIME,
 			aliveAtThisGeneration: 0,
-			emptyAtThisGeneration: 0
+			emptyAtThisGeneration: 0,
+			isMouseDown: false
 		};
 
 		this.gameInterval = setInterval(this.ticker, this.state.intervalTime);
@@ -86,7 +87,8 @@ export class Game extends React.Component {
 			newcomersCoords: newcomers,
 			generationsCount: 0,
 			aliveAtThisGeneration: 0,
-			emptyAtThisGeneration: 0
+			emptyAtThisGeneration: 0,
+			isMouseDown: false
 		});
 	};
 
@@ -100,11 +102,25 @@ export class Game extends React.Component {
 		}
 	};
 
-	updateCellState = (x, y, oldState) => {
-		const newCellState = oldState === 0 ? 1 : 0;
+	onMouseDown = () => {
 		this.setState({
-			gameStateArray: updateCellStateInArray(x, y, newCellState, this.state.gameStateArray)
+			isMouseDown: true
 		});
+	};
+
+	onMouseUp = () => {
+		this.setState({
+			isMouseDown: false
+		});
+	};
+
+	updateCellState = (x, y, oldState, movementBegins) => {
+		if (this.state.isMouseDown || movementBegins) {
+			const newCellState = oldState === 0 ? 1 : 0;
+			this.setState({
+				gameStateArray: updateCellStateInArray(x, y, newCellState, this.state.gameStateArray)
+			});
+		}
 	};
 
 	componentWillUnount() {
@@ -145,6 +161,8 @@ export class Game extends React.Component {
 				<GameField
 					gameStateArray={gameStateArray}
 					newcomersCoords={newcomersCoords}
+					onMouseDown={this.onMouseDown}
+					onMouseUp={this.onMouseUp}
 					updateCellState={this.updateCellState}
 				/>
 			</div>

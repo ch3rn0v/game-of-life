@@ -17,8 +17,8 @@ export const UserInstructions = () => {
 				</a>.
 			</p>
 			<p>
-				If you want to create or remove cells you can either click on a cell to change its state, or hold alt
-				and hover your mouse over some cells. Good luck!
+				If you want to create or remove cells you can either click on a cell to change its state, or hold mouse
+				button and hover your cursor over some cells. Good luck!
 			</p>
 		</div>
 	);
