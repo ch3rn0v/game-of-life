@@ -42,7 +42,7 @@ export class GameChart extends React.Component {
 			data: { fill: '#84c26e' }
 		};
 
-		const cursorIsInTheLeftHalf = this.state.cursorValue < 0.6 * chartData[chartData.length - 1].generation;
+		const cursorIsInTheLeftHalf = this.state.cursorValue < 0.5 * chartData[chartData.length - 1].generation;
 
 		let cursorLabelShiftX,
 			cursorLabelShiftY = 0;
@@ -54,7 +54,7 @@ export class GameChart extends React.Component {
 				: chartData[0].aliveAtThisGeneration;
 
 		if (cursorIsInTheLeftHalf) {
-			cursorLabelShiftX = 5;
+			cursorLabelShiftX = 20;
 		} else {
 			cursorLabelShiftX = -125;
 		}
