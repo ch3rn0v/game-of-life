@@ -52,5 +52,7 @@ export class GameField extends React.Component {
 GameField.propTypes = {
 	gameStateArray: PropTypes.array.isRequired,
 	newcomersCoords: PropTypes.array.isRequired,
+	onMouseDown: PropTypes.func.isRequired,
+	onMouseUp: PropTypes.func.isRequired,
 	updateCellState: PropTypes.func.isRequired
 };

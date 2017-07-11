@@ -39,7 +39,6 @@ export class Cell extends React.Component {
 				onMouseDown={this.onMouseDown}
 				onMouseUp={this.onMouseUp}
 				onMouseEnter={this.onMouseEnter}
-				//onClick={this.onMouseClick}
 			/>
 		);
 	}
@@ -52,5 +51,7 @@ Cell.propTypes = {
 	isNewcomer: PropTypes.bool.isRequired,
 	isCorpse: PropTypes.bool.isRequired,
 	width: PropTypes.number.isRequired,
+	onMouseDown: PropTypes.func.isRequired,
+	onMouseUp: PropTypes.func.isRequired,
 	updateCellState: PropTypes.func.isRequired
 };
