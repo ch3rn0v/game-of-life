@@ -31,8 +31,11 @@ export class GameChart extends React.Component {
 		const emptyCellsAreaStyle = { data: { fill: '#84c26e' } };
 
 		let cursorLabelShiftX = 0;
-		const cursorIsInTheLeftHalf = this.state.cursorValue < 0.5 * chartData[chartData.length - 1].generation;
-		cursorIsInTheLeftHalf ? (cursorLabelShiftX = 20) : (cursorLabelShiftX = -125);
+		const cursorIsInTheLeftHalf = this.state.cursorValue < 0.7 * chartData[chartData.length - 1].generation;
+		const lessThanTwoGenerationsDataIsGiven = chartData.length < 2;
+		cursorIsInTheLeftHalf || lessThanTwoGenerationsDataIsGiven
+			? (cursorLabelShiftX = 20)
+			: (cursorLabelShiftX = -125);
 
 		const cursorPickedGeneration = Math.round(this.state.cursorValue);
 		const aliveCellsAtCursorPickedGeneration =
