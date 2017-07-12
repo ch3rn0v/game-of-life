@@ -2,30 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export class Cell extends React.Component {
-	onMouseDown = (e) => {
+	onMouseDown = (e, x, y, cellState) => {
 		e.preventDefault();
-		this.props.onMouseDown();
-		this.props.updateCellState(this.props.x, this.props.y, this.props.cellState, true);
+		this.props.cell.onMouseDown();
+		this.props.cell.updateCellState(x, y, cellState, true);
 	};
 
 	onMouseUp = (e) => {
 		e.preventDefault();
-		this.props.onMouseUp();
+		this.props.cell.onMouseUp();
 	};
 
-	onMouseEnter = (e) => {
+	onMouseEnter = (e, x, y, cellState) => {
 		e.preventDefault();
-		this.props.updateCellState(this.props.x, this.props.y, this.props.cellState, false);
+		this.props.cell.updateCellState(x, y, cellState, false);
 	};
 
 	render() {
-		const { cellState, isNewcomer, isCorpse } = this.props;
+		const { cellState, isNewcomer, isCorpse, width, x, y } = this.props.cell;
 		const cellIsAliveClass = cellState === 1 ? 'alive' : 'empty';
 		const cellIsNewcomerClass = isNewcomer ? 'newcomer' : '';
 		const cellIsCorpseClass = isCorpse ? 'corpse' : '';
 		const cssStyle = {
-			width: this.props.width - 2 + 'px',
-			height: this.props.width - 2 + 'px',
+			width: width - 2 + 'px', // "-2" because of border with 1px width
+			height: width - 2 + 'px',
 			borderWidth: '1px',
 			borderStyle: 'solid'
 		};
@@ -36,22 +36,20 @@ export class Cell extends React.Component {
 				onDragStart={() => {
 					return false;
 				}}
-				onMouseDown={this.onMouseDown}
-				onMouseUp={this.onMouseUp}
-				onMouseEnter={this.onMouseEnter}
+				onMouseDown={(e) => {
+					this.onMouseDown(e, x, y, cellState);
+				}}
+				onMouseUp={(e) => {
+					this.onMouseUp(e);
+				}}
+				onMouseEnter={(e) => {
+					this.onMouseEnter(e, x, y, cellState);
+				}}
 			/>
 		);
 	}
 }
 
 Cell.propTypes = {
-	cellState: PropTypes.number.isRequired,
-	x: PropTypes.number.isRequired,
-	y: PropTypes.number.isRequired,
-	isNewcomer: PropTypes.bool.isRequired,
-	isCorpse: PropTypes.bool.isRequired,
-	width: PropTypes.number.isRequired,
-	onMouseDown: PropTypes.func.isRequired,
-	onMouseUp: PropTypes.func.isRequired,
-	updateCellState: PropTypes.func.isRequired
+	cell: PropTypes.object.isRequired
 };

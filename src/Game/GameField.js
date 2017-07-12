@@ -22,26 +22,26 @@ export class GameField extends React.Component {
 		};
 	}
 
+	renderCell = (cell) => {
+		return <Cell cell={cell} />;
+	};
+
 	render() {
 		return (
 			<div className="game-field" style={this.state.cssStyles}>
 				{this.props.gameStateArray.map((row, i) => {
 					return row.map((cellState, j) => {
-						const isNewcomer = this.props.newcomersCoords[i][j] === 1 ? true : false;
-						const isCorpse = this.props.newcomersCoords[i][j] === -1 ? true : false;
-						return (
-							<Cell
-								cellState={cellState}
-								x={j}
-								y={i}
-								isNewcomer={isNewcomer}
-								isCorpse={isCorpse}
-								width={this.state.cellWidth}
-								onMouseDown={this.props.onMouseDown}
-								onMouseUp={this.props.onMouseUp}
-								updateCellState={this.props.updateCellState}
-							/>
-						);
+						return this.renderCell({
+							cellState: cellState,
+							x: j,
+							y: i,
+							width: this.state.cellWidth,
+							isNewcomer: this.props.newcomersCoords[i][j] === 1 ? true : false,
+							isCorpse: this.props.newcomersCoords[i][j] === -1 ? true : false,
+							onMouseDown: this.props.onMouseDown,
+							onMouseUp: this.props.onMouseUp,
+							updateCellState: this.props.updateCellState
+						});
 					});
 				})}
 			</div>
