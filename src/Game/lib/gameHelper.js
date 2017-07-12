@@ -222,3 +222,14 @@ export const CalculateChartData = (prevChartData, aliveAtThisGeneration, emptyAt
 		}
 	]);
 };
+
+export const calculateCellCountByGeneration = (chartData, generation) => {
+	const index = chartData.findIndex((dataObject) => {
+		return dataObject.generation === generation;
+	});
+	if (index >= 0) {
+		return chartData[index].aliveAtThisGeneration;
+	} else {
+		return 0;
+	}
+};
