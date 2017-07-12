@@ -14,12 +14,12 @@ import {
 	CalculateChartData
 } from './lib/gameHelper';
 
-// Field's sizes:
+// Field's default sizes:
 const DEFAULT_GAME_FIELD_WIDTH = 40;
 const DEFAULT_GAME_FIELD_HEIGTH = 20;
 
 // Time for each generation to be displayed.
-//1000 — 1 generation per second. 50 — 20 generations per second, etc.
+// 1000 — 1 generation per second. 50 — 20 generations per second, etc.
 const DEFAULT_INTERVAL_TIME = 100;
 
 export class Game extends React.Component {
@@ -78,15 +78,11 @@ export class Game extends React.Component {
 
 	onGamePause = () => {
 		clearInterval(this.gameInterval);
-		this.setState({
-			isRunning: false
-		});
+		this.setState({ isRunning: false });
 	};
 
 	onGameResume = () => {
-		this.setState({
-			isRunning: true
-		});
+		this.setState({ isRunning: true });
 		this.gameInterval = setInterval(this.ticker, this.state.intervalTime);
 	};
 
@@ -109,9 +105,7 @@ export class Game extends React.Component {
 	};
 
 	onGameSpeedChange = (newIntervalTime) => {
-		this.setState({
-			intervalTime: newIntervalTime
-		});
+		this.setState({ intervalTime: newIntervalTime });
 		this.onGamePause();
 		if (this.state.isRunning) {
 			this.onGameResume();
@@ -119,19 +113,15 @@ export class Game extends React.Component {
 	};
 
 	onMouseDown = () => {
-		this.setState({
-			isMouseDown: true
-		});
+		this.setState({ isMouseDown: true });
 	};
 
 	onMouseUp = () => {
-		this.setState({
-			isMouseDown: false
-		});
+		this.setState({ isMouseDown: false });
 	};
 
-	updateCellState = (x, y, oldState, movementBegins) => {
-		if (this.state.isMouseDown || movementBegins) {
+	updateCellState = (x, y, oldState, cursorMovementBegins) => {
+		if (this.state.isMouseDown || cursorMovementBegins) {
 			const newCellState = oldState === 0 ? 1 : 0;
 			this.setState({
 				gameStateArray: updateCellStateInArray(x, y, newCellState, this.state.gameStateArray)
@@ -155,8 +145,7 @@ export class Game extends React.Component {
 			isRunning
 		} = this.state;
 
-		// There is always one generation per interval time.
-		// So divide one generation by interval time (which is divided by 1000 to convert it from ms to seconds).
+		// Divide one generation by interval time (which is divided by 1000 to convert it from ms to seconds).
 		const currentSpeed = Math.round(1000 / intervalTime);
 
 		return (
