@@ -213,10 +213,12 @@ export const calculateCurrentStats = (gameFieldArray) => {
 	};
 };
 
-export const CalculateChartData = (aliveAtThisGeneration, emptyAtThisGeneration, generationIndex) => {
-	return {
-		aliveAtThisGeneration: aliveAtThisGeneration,
-		emptyAtThisGeneration: emptyAtThisGeneration,
-		generation: generationIndex
-	};
+export const CalculateChartData = (prevChartData, aliveAtThisGeneration, emptyAtThisGeneration, generationIndex) => {
+	return prevChartData.concat([
+		{
+			aliveAtThisGeneration: aliveAtThisGeneration,
+			emptyAtThisGeneration: emptyAtThisGeneration,
+			generation: generationIndex
+		}
+	]);
 };

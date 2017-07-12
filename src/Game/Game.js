@@ -37,7 +37,7 @@ export class Game extends React.Component {
 			isRunning: true,
 			gameStateArray: initialGameField,
 			newcomersCoords: newcomers,
-			chartData: [ CalculateChartData(0, DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH, 1) ],
+			chartData: CalculateChartData([], 0, DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH, 1),
 			generationsCount: 1,
 			intervalTime: DEFAULT_INTERVAL_TIME,
 			aliveAtThisGeneration: 0,
@@ -61,10 +61,12 @@ export class Game extends React.Component {
 			this.state.newcomersCoords
 		);
 		const nextGenerationIndex = this.state.generationsCount + 1;
-		const nextGenerationChartData = [
-			...this.state.chartData,
-			CalculateChartData(aliveAtThisGeneration, emptyAtThisGeneration, nextGenerationIndex)
-		];
+		const nextGenerationChartData = CalculateChartData(
+			this.state.chartData,
+			aliveAtThisGeneration,
+			emptyAtThisGeneration,
+			nextGenerationIndex
+		);
 
 		this.setState({
 			gameStateArray: nextGeneration,
@@ -97,7 +99,7 @@ export class Game extends React.Component {
 			gameStateArray: initialGameField,
 			newcomersCoords: newcomers,
 			generationsCount: 1,
-			chartData: [ CalculateChartData(0, DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH, 1) ],
+			chartData: CalculateChartData([], 0, DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH, 1),
 			aliveAtThisGeneration: 0,
 			emptyAtThisGeneration: 0,
 			isMouseDown: false
