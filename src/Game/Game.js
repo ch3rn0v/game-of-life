@@ -33,15 +33,22 @@ export class Game extends React.Component {
 			DEFAULT_GAME_FIELD_HEIGTH
 		);
 
+		const { aliveAtThisGeneration, emptyAtThisGeneration } = calculateCurrentStats(initialGameField);
+
 		this.state = {
 			isRunning: true,
 			gameStateArray: initialGameField,
 			newcomersCoords: newcomers,
-			chartData: CalculateChartData([], 0, DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH, 1),
+			chartData: CalculateChartData(
+				[],
+				aliveAtThisGeneration,
+				DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH,
+				1
+			),
 			generationsCount: 1,
 			intervalTime: DEFAULT_INTERVAL_TIME,
-			aliveAtThisGeneration: 0,
-			emptyAtThisGeneration: 0,
+			aliveAtThisGeneration: aliveAtThisGeneration,
+			emptyAtThisGeneration: emptyAtThisGeneration,
 			isMouseDown: false
 		};
 
@@ -49,8 +56,6 @@ export class Game extends React.Component {
 	}
 
 	ticker = () => {
-		const { aliveAtThisGeneration, emptyAtThisGeneration } = calculateCurrentStats(this.state.gameStateArray);
-
 		// Pause if there is no one alive.
 		if (aliveAtThisGeneration === 0) {
 			this.onGamePause();
@@ -60,6 +65,7 @@ export class Game extends React.Component {
 			this.state.gameStateArray,
 			this.state.newcomersCoords
 		);
+		const { aliveAtThisGeneration, emptyAtThisGeneration } = calculateCurrentStats(nextGeneration);
 		const nextGenerationIndex = this.state.generationsCount + 1;
 		const nextGenerationChartData = CalculateChartData(
 			this.state.chartData,
@@ -95,13 +101,20 @@ export class Game extends React.Component {
 			DEFAULT_GAME_FIELD_HEIGTH
 		);
 
+		const { aliveAtThisGeneration, emptyAtThisGeneration } = calculateCurrentStats(initialGameField);
+
 		this.setState({
 			gameStateArray: initialGameField,
 			newcomersCoords: newcomers,
 			generationsCount: 1,
-			chartData: CalculateChartData([], 0, DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH, 1),
-			aliveAtThisGeneration: 0,
-			emptyAtThisGeneration: 0,
+			chartData: CalculateChartData(
+				[],
+				aliveAtThisGeneration,
+				DEFAULT_GAME_FIELD_WIDTH * DEFAULT_GAME_FIELD_HEIGTH,
+				1
+			),
+			aliveAtThisGeneration: aliveAtThisGeneration,
+			emptyAtThisGeneration: emptyAtThisGeneration,
 			isMouseDown: false
 		});
 	};
