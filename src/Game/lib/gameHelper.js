@@ -1,19 +1,12 @@
 // Game field initiation functions
 
 export const createEmptyGameField = (width, height) => {
-	let emptyGameField = [];
-	let newcomers = [];
-
-	// "i" stands for y axis, "j" stands for x axis.
-	// Because by default html elements are displayed in a row, not in a column.
-	for (var i = 0; i < height; i++) {
-		let row = [];
-		for (var j = 0; j < width; j++) {
-			row.push(0); // Zero stands for an empty or "dead" cell.
-		}
-		emptyGameField.push(row);
-		newcomers.push(row); // Populate this array with initial values of zero.
-	}
+	// By default html elements are displayed in a row, hence game field is an array of horizontal rows.
+	// Zero stands for an empty or "dead" cell.
+	const emptyGameField = Array(height).fill(0).map((r) => {
+		return Array(width).fill(0);
+	});
+	const newcomers = [ ...emptyGameField ];
 
 	// Initial Glider and R-Pentomino figures:
 	const gameFieldWithGlider = addGliderToBottomLeft(width, height, emptyGameField);
@@ -83,8 +76,7 @@ const calculateNeighbourCoordinateDeltas = (x, y, gameFieldArray) => {
 	[ 0,  -1 ],             [  0, 1 ],
 	[ 1,  -1 ], [  1, 0 ],  [  1, 1 ]
 
-	Below we take it as initial value.
-	Then check if the cell is on the edge.
+	Below we take it as initial value. Then check if the cell is on the edge.
 	If so, we replace the 'out of range' coordinates with coordinates of the opposite edge cells.
 	As if we are not on a plane, but rather on a torus' surface.
 	*/
@@ -101,8 +93,9 @@ const calculateNeighbourCoordinateDeltas = (x, y, gameFieldArray) => {
 	];
 
 	// If the cell is at the edge, we take cells from the opposite edge as its neighbours
-	const maxYValue = gameFieldArray.length - 1;
-	const maxXValue = gameFieldArray[0].length - 1;
+	const { width, height } = calculateWidthAndHeight(gameFieldArray);
+	const maxXValue = width - 1;
+	const maxYValue = height - 1;
 
 	if (y === 0) {
 		neighbourCoordinateDeltas = [
@@ -149,42 +142,40 @@ const calculateAliveNeighbours = (x, y, gameFieldArray) => {
 };
 
 export const processNextGeneration = (prevGeneration, prevNewcomers) => {
-	const { width, height } = calculateWidthAndHeight(prevGeneration);
 	let nextGeneration = [];
 	let newcomers = []; // '-1' — cell died. '0' — cell was not affected (either survived or remained dead) . '1' — cell was born.
 
-	for (var i = 0; i < height; i++) {
-		let row = [];
+	nextGeneration = prevGeneration.map((row, i) => {
 		let newcomersRow = [];
-		for (var j = 0; j < width; j++) {
+		const nextGenRow = row.map((cell, j) => {
 			let aliveNeighboursCount = calculateAliveNeighbours(j, i, prevGeneration);
-			if (prevGeneration[i][j] === 0 && aliveNeighboursCount === 3) {
+			if (cell === 0 && aliveNeighboursCount === 3) {
 				// Any dead cell with exactly three alive neighbours becomes a live cell, as if by reproduction.
-				row.push(1);
 				newcomersRow.push(1);
-			} else if (prevGeneration[i][j] === 0 && aliveNeighboursCount !== 3) {
+				return 1;
+			} else if (cell === 0 && aliveNeighboursCount !== 3) {
 				// Any dead cell with not exactly three alive neighbours becomes a dead cell, as if reproduction was not available.
-				row.push(0);
 				newcomersRow.push(0);
-			} else if (prevGeneration[i][j] === 1) {
+				return 0;
+			} else {
 				if (aliveNeighboursCount < 2) {
 					// Any live cell with fewer than two alive neighbours dies, as if caused by underpopulation.
-					row.push(0);
 					newcomersRow.push(-1);
+					return 0;
 				} else if (aliveNeighboursCount <= 3) {
 					// Any live cell with two or three alive neighbours lives on to the next generation.
-					row.push(1);
 					newcomersRow.push(0);
+					return 1;
 				} else {
 					// Any live cell with more than three alive neighbours dies, as if by overpopulation.
-					row.push(0);
 					newcomersRow.push(-1);
+					return 0;
 				}
 			}
-		}
-		nextGeneration.push(row);
+		});
 		newcomers.push(newcomersRow);
-	}
+		return nextGenRow;
+	});
 
 	return { nextGeneration, newcomers };
 };
@@ -201,11 +192,14 @@ export const calculateCurrentStats = (gameFieldArray) => {
 	const { width, height } = calculateWidthAndHeight(gameFieldArray);
 	let aliveAtThisGeneration = 0;
 
-	for (var i = 0; i < height; i++) {
-		for (var j = 0; j < width; j++) {
-			aliveAtThisGeneration += gameFieldArray[i][j];
-		}
-	}
+	aliveAtThisGeneration = gameFieldArray.reduce((sum, row) => {
+		return (
+			sum +
+			row.reduce((sum, cell) => {
+				return sum + cell;
+			}, 0)
+		);
+	}, 0);
 
 	return {
 		aliveAtThisGeneration: aliveAtThisGeneration,
