@@ -218,11 +218,14 @@ export const CalculateChartData = (prevChartData, aliveAtThisGeneration, emptyAt
 };
 
 export const calculateCellCountByGeneration = (chartData, generation) => {
+	/**
+	 * Since the generations sequence is successive and ongoing
+	 * I use generation's value as index to get the corresponding chartData object.
+	 * It's faster than Array.prototype.findIndex(), though more risky.
+	 * Why use array of objects instead of array of numbers? That's the chart lib requirement
+	 */
+
 	try {
-		/* Since the generations sequence is successive and ongoing
-		I use generation's value as index to get the corresponding chartData object.
-		It's faster than Array.prototype.findIndex(), though more risky.
-		Why use array of objects instead of array of numbers? That's the chart lib requirement */
 		return chartData[generation - 1].aliveAtThisGeneration;
 	} catch (e) {
 		console.error(e);
